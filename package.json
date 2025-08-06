@@ -2,6 +2,7 @@
   "name": "meownel",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.11.0",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -10,6 +11,8 @@
     "signup": "npx tsx src/scripts/signup.ts"
   },
   "dependencies": {
+    "@hugeicons/core-free-icons": "^1.0.16",
+    "@hugeicons/react": "^1.0.5",
     "better-auth": "^1.3.4",
     "next": "15.4.4",
     "pg": "^8.16.3",

@@ -13,7 +13,7 @@ export default function Toolbar({ session, user }: { session: Session, user: Use
                 <Navlink href="/dashboard" title="home"/>
                 <Navlink href="/servers" title="servers"/>
             </div>
-            <div className="flex flex-row items-center gap-4">
+            <div className="hidden sm:flex flex-row items-center gap-4">
                 <p className="text-sm text-zinc-400">Logged in as {user.name}</p>
                 <div className="w-[1px] h-[32px] bg-zinc-800" />
                 <button 

@@ -11,7 +11,7 @@ export default function Toolbar({ session, user }: { session: Session, user: Use
             <div className="flex flex-row items-center gap-4">
                 <h1 className="text-2xl font-bold">meownel</h1>
                 <Navlink href="/dashboard" title="home"/>
-                <Navlink href="/servers" title="servers"/>
+                <Navlink href="/instances" title="instances"/>
             </div>
             <div className="hidden sm:flex flex-row items-center gap-4">
                 <p className="text-sm text-zinc-400">Logged in as {user.name}</p>

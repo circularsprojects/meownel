@@ -5,7 +5,8 @@ import { hideBin } from "yargs/helpers";
 const parser = yargs(hideBin(process.argv)).options({
     create: { type: 'boolean', describe: 'Create a new example minecraft server' },
     selectedNode: { type: 'string', describe: 'Node to create the server on' },
-    delete: { type: 'boolean', describe: 'Delete the example minecraft server' }
+    delete: { type: 'boolean', describe: 'Delete the example minecraft server' },
+    namespace: { type: 'string', default: 'default', describe: 'Kubernetes namespace to use' }
 }).conflicts({
     create: 'delete',
     delete: 'create'
@@ -15,7 +16,7 @@ async function main () {
     const argv = await parser.parse();
 
     const kc = new KubeConfig();
-    kc.loadFromFile("src/scripts/k3s.yaml");
+    kc.loadFromFile("k3s.yaml");
 
     const k8sApi = kc.makeApiClient(CoreV1Api);
     const appsApi = kc.makeApiClient(AppsV1Api)
@@ -24,7 +25,7 @@ async function main () {
         console.log(res.items.map(node => node.metadata?.name).join(", "));
     })
 
-    await k8sApi.listNamespacedPod({ namespace: 'default' }).then((res) => {
+    await k8sApi.listNamespacedPod({ namespace: argv.namespace }).then((res) => {
         const pods = res.items;
 
         for (const pod of pods) {
@@ -39,8 +40,6 @@ async function main () {
         }
 
         console.log(`Creating example minecraft server on node: ${argv.selectedNode}`);
-
-        const namespace = "default";
 
         const deployment: V1Deployment = {
             apiVersion: "apps/v1",
@@ -75,7 +74,7 @@ async function main () {
         }
 
         await appsApi.createNamespacedDeployment({
-            namespace,
+            namespace: argv.namespace,
             body: deployment
         })
 
@@ -93,7 +92,7 @@ async function main () {
         }
 
         await k8sApi.createNamespacedService({
-            namespace,
+            namespace: argv.namespace,
             body: service
         })
 
@@ -103,12 +102,10 @@ async function main () {
     if (argv.delete) {
         console.log("Deleting example minecraft server...");
 
-        const namespace = "default";
-
         try {
             await appsApi.deleteNamespacedDeployment({
                 name: "minecraft-deployment",
-                namespace
+                namespace: argv.namespace
             });
             console.log("Minecraft server deployment deleted successfully.");
         } catch (error) {
@@ -118,7 +115,7 @@ async function main () {
         try {
             await k8sApi.deleteNamespacedService({
                 name: "minecraft-service",
-                namespace
+                namespace: argv.namespace
             });
             console.log("Minecraft server service deleted successfully.");
         } catch (error) {

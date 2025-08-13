@@ -15,15 +15,17 @@ export async function listNodes() {
     }
 }
 
-export async function listNodesAsString() {
-    await listNodes().then((res) => {
+export async function listNodesAsString(): Promise<string> {
+    return await listNodes().then((res) => {
         return res.items.map(node => node.metadata?.name).join(", ");
     });
 }
 
-export async function listPods(namespace: string = process.env.KUBERNETES_NAMESPACE || "default") {
+export const namespace = process.env.KUBERNETES_NAMESPACE || "default";
+
+export async function listPods(searchNamespace: string = namespace) {
     try {
-        return await k8sApi.listNamespacedPod({ namespace: namespace });
+        return await k8sApi.listNamespacedPod({ namespace: searchNamespace });
     } catch (err) {
         console.error("Error listing pods:", err);
         throw err;

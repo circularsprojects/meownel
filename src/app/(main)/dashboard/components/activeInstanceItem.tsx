@@ -1,3 +1,5 @@
+"use client";
+
 import { Settings } from "lucide-react";
 
 export default function ActiveInstanceItem({name, image}: {name: string, image: string}) {

@@ -44,14 +44,16 @@ async function main () {
         const deployment: V1Deployment = {
             apiVersion: "apps/v1",
             kind: "Deployment",
-            metadata: { name: "minecraft-deployment" },
+            metadata: { 
+                name: "minecraft-server"
+            },
             spec: {
                 replicas: 1,
                 selector: {
-                    matchLabels: { app: "minecraft" }
+                    matchLabels: { app: "minecraft-server" }
                 },
                 template: {
-                    metadata: { labels: { app: "minecraft" } },
+                    metadata: { labels: { app: "minecraft-server" } },
                     spec: {
                         nodeSelector: { "kubernetes.io/hostname": argv.selectedNode },
                         containers: [
@@ -104,7 +106,7 @@ async function main () {
 
         try {
             await appsApi.deleteNamespacedDeployment({
-                name: "minecraft-deployment",
+                name: "minecraft-server",
                 namespace: argv.namespace
             });
             console.log("Minecraft server deployment deleted successfully.");

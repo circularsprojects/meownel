@@ -19,14 +19,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-const nodes = [
-  "kube-node-1",
-  "kube-node-2"
-]
-
 export default function NodeDropdown({ value, onChange }: { value: string; onChange: (value: string) => void }) {
   const [open, setOpen] = React.useState(false)
+  const [nodes, setNodes] = React.useState<string[]>([])
   //const [value, setValue] = React.useState("")
+
+  React.useEffect(() => {
+    fetch("/api/nodes")
+      .then(res => res.json())
+      .then(data => {
+        setNodes(data)
+      })
+      .catch(() => setNodes([]))
+  }, [])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

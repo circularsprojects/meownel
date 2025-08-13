@@ -9,6 +9,10 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .pixelated {
+    image-rendering: pixelated;
+  }
 }
 
 @theme inline {

@@ -1,8 +1,9 @@
 import { auth } from "@/utils/auth";
+import { listPods } from "@/utils/kubernetes";
 import Pool from "@/utils/postgres";
-import { KubeConfig, CoreV1Api, V1Deployment, AppsV1Api } from "@kubernetes/client-node";
+import { NextRequest } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
     const session = await auth.api.getSession({
         headers: request.headers
     });
@@ -13,8 +14,16 @@ export async function GET(request: Request) {
     }
 
     try {
+        const runningPods = await listPods();
+        const runningPodNames = runningPods.items.map(pod => pod.metadata?.labels?.app).filter(name => name !== undefined);
+
         const result = await Pool.query("SELECT * FROM pods");
         const rows = result.rows.map(row => {
+            if (runningPodNames.includes(row.name)) {
+                row.running = true;
+            } else {
+                row.running = false;
+            }
             delete row.config_path;
             return row;
         });
@@ -31,13 +40,4 @@ export async function GET(request: Request) {
             status: 500
         });
     }
-}
-
-export async function POST(request: Request) {
-    return new Response(`Method ${request.method} Not Allowed`, {
-        status: 405,
-        headers: {
-            Allow: "GET"
-        }
-    });
 }

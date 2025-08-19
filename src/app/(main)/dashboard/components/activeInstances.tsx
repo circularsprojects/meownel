@@ -37,7 +37,7 @@ export default function ActiveInstances() {
         <div className="flex p-2 gap-2">
             <div className="rounded-xl border-2 border-zinc-900 p-4 bg-black min-w-[24rem] min-h-[12rem]">
                 <h1 className="text-2xl font-bold mb-3">Active Instances</h1>
-                <div className="flex flex-col gap-2 max-h-[32rem] overflow-y-auto no-scrollbar">
+                <div className="flex flex-col gap-2 max-h-[32rem] overflow-y-auto">
                     {loading ? (
                         <LoaderCircle className="animate-spin h-12 w-12 text-gray-500" />
                     ) : (
@@ -57,7 +57,7 @@ export default function ActiveInstances() {
             </div>
             <div className="rounded-xl border-2 border-zinc-900 p-4 bg-black min-w-[24rem] min-h-[12rem]">
                 <h1 className="text-2xl font-bold mb-3">Active Proxies</h1>
-                <div className="flex flex-col gap-2 max-h-[32rem] overflow-y-auto no-scrollbar">
+                <div className="flex flex-col gap-2 max-h-[32rem] overflow-y-auto">
                     {loading ? (
                         <LoaderCircle className="animate-spin h-12 w-12 text-gray-500" />
                     ) : (

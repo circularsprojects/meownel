@@ -31,3 +31,21 @@ export async function listPods(searchNamespace: string = namespace) {
         throw err;
     }
 }
+
+export async function listDeployments(searchNamespace: string = namespace) {
+    try {
+        return await appsApi.listNamespacedDeployment({ namespace: searchNamespace });
+    } catch (err) {
+        console.error("Error listing deployments:", err);
+        throw err;
+    }
+}
+
+export async function listServices(searchNamespace: string = namespace) {
+    try {
+        return await k8sApi.listNamespacedService({ namespace: searchNamespace });
+    } catch (err) {
+        console.error("Error listing services:", err);
+        throw err;
+    }
+}

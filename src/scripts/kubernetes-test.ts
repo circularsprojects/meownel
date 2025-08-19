@@ -45,15 +45,28 @@ async function main () {
             apiVersion: "apps/v1",
             kind: "Deployment",
             metadata: { 
-                name: "minecraft-server"
+                name: "minecraft-server",
+                labels: {
+                    displayName: "Minecraft Server"
+                }
             },
             spec: {
                 replicas: 1,
                 selector: {
                     matchLabels: { app: "minecraft-server" }
                 },
+                strategy: {
+                    rollingUpdate: {
+                        maxSurge: 1,
+                        maxUnavailable: 0
+                    }
+                },
                 template: {
-                    metadata: { labels: { app: "minecraft-server" } },
+                    metadata: {
+                        labels: {
+                            app: "minecraft-server"
+                        }
+                    },
                     spec: {
                         nodeSelector: { "kubernetes.io/hostname": argv.selectedNode },
                         containers: [

@@ -2,17 +2,17 @@
 @import "tw-animate-css";
 
 @layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
   .pixelated {
     image-rendering: pixelated;
   }
+}
+
+:root {
+  scrollbar-width: none;
+}
+
+:root::-webkit-scrollbar {
+  display: none;
 }
 
 @theme inline {

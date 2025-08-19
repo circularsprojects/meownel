@@ -1,4 +1,4 @@
-import { listNodesAsString, listPods, namespace } from "@/utils/kubernetes";
+import { listDeployments, listNodesAsString, listPods, listServices, namespace } from "@/utils/kubernetes";
 
 async function main() {
     await listNodesAsString().then((nodes) => {
@@ -9,6 +9,20 @@ async function main() {
         console.log(`Pods in ${namespace}:`);
         pods.items.forEach((pod) => {
             console.log(`[${pod.status?.phase}] [${pod.spec?.nodeName}] ${pod.metadata?.name} ${pod.metadata?.labels?.app ? `(${pod.metadata?.labels?.app})` : ''}`);
+        });
+    });
+
+    await listDeployments().then((deployments) => {
+        console.log(`Deployments in ${namespace}:`);
+        deployments.items.forEach((deployment) => {
+            console.log(`${deployment.metadata?.name} (${deployment.spec?.replicas} desired replicas) (${deployment.spec?.template.metadata?.labels?.app}) (${deployment.spec?.template.spec?.containers.map(container => `${container.name}:${container.image}`).join(', ')})`);
+        });
+    });
+
+    await listServices().then((services) => {
+        console.log(`Services in ${namespace}:`);
+        services.items.forEach((service) => {
+            console.log(`${service.metadata?.name} (${service.spec?.type} ${service.spec?.ports?.map(port => `${port.port}/${port.protocol}`).join(', ')})`);
         });
     });
 }

@@ -46,7 +46,7 @@ async function main () {
             kind: "Deployment",
             metadata: { 
                 name: "minecraft-server",
-                labels: {
+                annotations: {
                     displayName: "Minecraft Server"
                 }
             },

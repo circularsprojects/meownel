@@ -19,7 +19,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export default function NodeDropdown({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+export default function NodeDropdown({ value, onChangeAction }: { value: string; onChangeAction: (value: string) => void }) {
   const [open, setOpen] = React.useState(false)
   const [nodes, setNodes] = React.useState<string[]>([])
   //const [value, setValue] = React.useState("")
@@ -59,7 +59,7 @@ export default function NodeDropdown({ value, onChange }: { value: string; onCha
                   key={node}
                   value={node}
                   onSelect={(currentValue) => {
-                    onChange(currentValue === value ? "" : currentValue)
+                    onChangeAction(currentValue === value ? "" : currentValue)
                     setOpen(false)
                   }}
                 >

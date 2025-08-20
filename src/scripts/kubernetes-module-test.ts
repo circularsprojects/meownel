@@ -15,7 +15,7 @@ async function main() {
     await listDeployments().then((deployments) => {
         console.log(`Deployments in ${namespace}:`);
         deployments.items.forEach((deployment) => {
-            console.log(`${deployment.metadata?.name} (${deployment.spec?.replicas} desired replicas) (${deployment.spec?.template.metadata?.labels?.app}) (${deployment.spec?.template.spec?.containers.map(container => `${container.name}:${container.image}`).join(', ')})`);
+            console.log(`${deployment.metadata?.name} (${deployment.spec?.replicas} desired replicas) (${deployment.metadata?.annotations?.displayName ? deployment.metadata?.annotations?.displayName : 'No Display Name'}) (${deployment.spec?.template.spec?.containers.map(container => `${container.name}:${container.image}`).join(', ')})`);
         });
     });
 

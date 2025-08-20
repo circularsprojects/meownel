@@ -2,7 +2,7 @@
 
 import { Settings } from "lucide-react";
 
-export default function ActiveInstanceItem({name, image}: {name: string, image: string}) {
+export default function ActiveDeployment({name, image}: {name: string, image: string}) {
     return (
         <div className="w-full border border-zinc-800 p-2 rounded-md flex flex-row justify-between">
             <div>

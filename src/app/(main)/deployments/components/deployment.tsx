@@ -2,17 +2,17 @@ import { toast } from "@/components/toast";
 import { Button } from "@/components/ui/button";
 import { Power, Settings } from "lucide-react";
 
-export default function Instance({ display_name, node, image, running }: { display_name: string; node: string; image: string, running?: boolean }) {
+export default function Deployment({ name, display_name, node, image, running }: { name: string; display_name: string; node: string; image: string, running?: boolean }) {
     async function powerAction() {
         if (running) {
             toast({
-                title: "Stopping instance...",
-                description: `Stopping instance "${display_name}" on node "${node}"`,
+                title: "Stopping deployment...",
+                description: `Scaling deployment "${name}" to 0 on node "${node}"`,
             })
         } else {
             toast({
-                title: "Starting instance...",
-                description: `Starting instance "${display_name}" on node "${node}"`,
+                title: "Starting deployment...",
+                description: `Scaling deployment "${name}" to 1 on node "${node}"`,
             })
         }
     }

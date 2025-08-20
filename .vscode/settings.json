@@ -1,3 +1,12 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "terminal.integrated.env.linux": {
+        "KUBERNETES_NAMESPACE": "meownel"
+    },
+    "terminal.integrated.env.osx": {
+        "KUBERNETES_NAMESPACE": "meownel"
+    },
+    "terminal.integrated.env.windows": {
+        "KUBERNETES_NAMESPACE": "meownel"
+    }
 }

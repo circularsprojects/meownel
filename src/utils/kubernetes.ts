@@ -1,4 +1,5 @@
-import { KubeConfig, CoreV1Api, AppsV1Api } from "@kubernetes/client-node";
+import Deployment from "@/app/(main)/deployments/components/deployment";
+import { KubeConfig, CoreV1Api, AppsV1Api, AppsV1ApiPatchNamespacedDeploymentRequest, V1Deployment } from "@kubernetes/client-node";
 
 const kc = new KubeConfig();
 kc.loadFromFile("k3s.yaml");
@@ -46,6 +47,30 @@ export async function listServices(searchNamespace: string = namespace) {
         return await k8sApi.listNamespacedService({ namespace: searchNamespace });
     } catch (err) {
         console.error("Error listing services:", err);
+        throw err;
+    }
+}
+
+export async function scaleDeployment(deploymentName: string, replicas: number, searchNamespace: string = namespace) {
+    try {
+        const deployment = await appsApi.readNamespacedDeployment({
+            name: deploymentName,
+            namespace: searchNamespace
+        });
+
+        if (deployment.spec) {
+            deployment.spec!.replicas = replicas;
+        } else {
+            throw new Error("Deployment spec is undefined");
+        }
+
+        return await appsApi.replaceNamespacedDeployment({
+            name: deploymentName,
+            namespace: searchNamespace,
+            body: deployment
+        })
+    } catch (err) {
+        console.error("Error scaling deployment:", err);
         throw err;
     }
 }

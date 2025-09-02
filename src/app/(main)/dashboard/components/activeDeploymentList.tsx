@@ -5,11 +5,16 @@ import ActiveDeployment from "./activeDeployment";
 import { toast } from "@/components/toast";
 import { LoaderCircle } from "lucide-react";
 import { V1DeploymentList } from "@kubernetes/client-node";
+import ConnectedNode from "./connectedNode";
 
 export default function ActiveDeploymentList() {
     const [deployments, setDeployments] = useState<V1DeploymentList | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [dLoading, setdLoading] = useState(true);
+    const [dError, setdError] = useState<string | null>(null);
+
+    const [nodes, setNodes] = useState<string[]>([]);
+    const [nLoading, setnLoading] = useState(true);
+    const [nError, setnError] = useState<string | null>(null);
 
     useEffect(() => {
         let statusCode: number;
@@ -20,8 +25,13 @@ export default function ActiveDeploymentList() {
                 return res.json();
             })
             .then(data => {
-                setDeployments(data);
-                setLoading(false);
+                if (statusCode === 200) {
+                    setDeployments(data);
+                } else {
+                    setDeployments(null);
+                    setdError(`Error fetching deployments: ${data.message ? data.message : data.body ? data.body : `Error code ${statusCode}`}`);
+                }
+                setdLoading(false);
             })
             .catch((err) => {
                 toast({
@@ -29,22 +39,50 @@ export default function ActiveDeploymentList() {
                     description: err.message,
                 });
                 setDeployments(null);
-                setError(err.message);
-                setLoading(false);
+                setdError(err.message);
+                setdLoading(false);
+            });
+    }, []);
+
+    useEffect(() => {
+        let statusCode: number;
+
+        fetch("/api/nodes")
+            .then(res => {
+                statusCode = res.status;
+                return res.json();
+            })
+            .then(data => {
+                if (statusCode === 200) {
+                    setNodes(data);
+                } else {
+                    setNodes([]);
+                    setnError(`Error fetching nodes: ${data.message ? data.message : data.body ? data.body : `Error code ${statusCode}`}`);
+                }
+                setnLoading(false);
+            })
+            .catch((err) => {
+                toast({
+                    title: `Error fetching nodes (${statusCode})`,
+                    description: err.message,
+                });
+                setNodes([]);
+                setnError(err.message);
+                setnLoading(false);
             });
     }, []);
 
     return (
         <div className="flex p-2 gap-2">
-            <div className="rounded-xl border-2 border-zinc-900 p-4 bg-black min-w-[24rem] min-h-[12rem]">
+            <div className="rounded-xl border-2 border-zinc-900 p-4 bg-black min-w-[24rem] max-w-[40rem] min-h-[12rem]">
                 <h1 className="text-2xl font-bold mb-3">Active Deployments</h1>
                 <div className="flex flex-col gap-2 max-h-[32rem] overflow-y-auto">
-                    {loading ? (
+                    {dLoading ? (
                         <LoaderCircle className="animate-spin h-12 w-12 text-gray-500" />
                     ) : (
-                        error ? (
+                        dError ? (
                             <div className="bg-red-500/50 border border-red-500 p-2">
-                                <p>{error}</p>
+                                <p>{dError}</p>
                             </div>
                         ) : (
                             <>
@@ -75,24 +113,22 @@ export default function ActiveDeploymentList() {
                     )}
                 </div>
             </div>
-            <div className="rounded-xl border-2 border-zinc-900 p-4 bg-black min-w-[24rem] min-h-[12rem]">
+            <div className="rounded-xl border-2 border-zinc-900 p-4 bg-black min-w-[24rem] max-w-[40rem] min-h-[12rem]">
                 <h1 className="text-2xl font-bold mb-3">Connected Nodes</h1>
                 <div className="flex flex-col gap-2 max-h-[32rem] overflow-y-auto">
-                    {/* {loading ? (
+                    {nLoading ? (
                         <LoaderCircle className="animate-spin h-12 w-12 text-gray-500" />
                     ) : (
-                        error ? (
+                        nError ? (
                             <div className="bg-red-500/50 border border-red-500 p-2">
-                                <p>{error}</p>
+                                <p>{nError}</p>
                             </div>
                         ) : (
-                            instances.map(instance => {
-                                if (instance.tags?.includes("proxy")) {
-                                    return <ActiveInstanceItem key={instance.name} name={instance.display_name} image={instance.image} />
-                                }
+                            nodes.map((node) => {
+                                return <ConnectedNode name={node} key={node} />;
                             })
                         )
-                    )} */}
+                    )}
                 </div>
             </div>
         </div>

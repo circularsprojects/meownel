@@ -1,14 +1,24 @@
 import { listNodes } from "@/utils/kubernetes";
 
 export async function GET(request: Request) {
-    const nodes = await listNodes();
-    const nodeNames = nodes.items.map(node => node.metadata?.name).filter(name => name !== undefined);
-    return new Response(JSON.stringify(nodeNames), {
-        status: 200,
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
+    try {
+        const nodes = await listNodes();
+        const nodeNames = nodes.items.map(node => node.metadata?.name).filter(name => name !== undefined);
+        return new Response(JSON.stringify(nodeNames), {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    } catch (err) {
+        console.error("Error fetching nodes:", err);
+        return new Response(JSON.stringify(err), {
+            status: 500,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    }
 }
 
 export async function POST(request: Request) {

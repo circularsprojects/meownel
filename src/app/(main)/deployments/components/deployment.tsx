@@ -9,11 +9,53 @@ export default function Deployment({ name, display_name, node, image, running }:
                 title: "Stopping deployment...",
                 description: `Scaling deployment "${name}" to 0 on node "${node}"`,
             })
+            const response = await fetch("/api/deployments/scale", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    deployment: name,
+                    scaleTarget: 0
+                })
+            });
+            if (response.ok) {
+                toast({
+                    title: "Deployment stopped successfully",
+                    description: `Deployment "${name}" is now stopped on node "${node}"`,
+                });
+            } else {
+                toast({
+                    title: "Error stopping deployment",
+                    description: `Failed to stop deployment "${name}" on node "${node}"`,
+                });
+            }
         } else {
             toast({
                 title: "Starting deployment...",
                 description: `Scaling deployment "${name}" to 1 on node "${node}"`,
             })
+            const response = await fetch("/api/deployments/scale", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    deployment: name,
+                    scaleTarget: 1
+                })
+            });
+            if (response.ok) {
+                toast({
+                    title: "Deployment started successfully",
+                    description: `Deployment "${name}" is now running on node "${node}"`,
+                });
+            } else {
+                toast({
+                    title: "Error starting deployment",
+                    description: `Failed to start deployment "${name}" on node "${node}"`,
+                });
+            }
         }
     }
 

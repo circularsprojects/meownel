@@ -30,8 +30,11 @@ export async function GET(request: NextRequest) {
         // });
     } catch (err) {
         console.error("Error fetching pods:", err);
-        return new Response("500 Internal Server Error", {
-            status: 500
+        return new Response(JSON.stringify(err), {
+            status: 500,
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
     }
 }

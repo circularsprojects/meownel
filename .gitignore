@@ -35,6 +35,7 @@ yarn-error.log*
 
 # secrets
 k3s.yaml
+k3s-*.yaml
 
 # vercel
 .vercel

@@ -1,10 +1,54 @@
 import { toast } from "@/components/toast";
 import { Button } from "@/components/ui/button";
+import { V1Deployment, V1Pod } from "@kubernetes/client-node";
 import { Power, Settings } from "lucide-react";
 
-export default function Deployment({ name, display_name, node, image, running }: { name: string; display_name: string; node: string; image: string, running?: boolean }) {
+enum DeploymentState {
+    Running,
+    Unhealthy,
+    Stopped
+}
+
+export default function Deployment({ deployment, pods }: { deployment: V1Deployment, pods: V1Pod[] }) {
+    const metadata = deployment.metadata!;
+    const name = metadata.name!;
+    const displayName = metadata?.annotations?.displayName;
+    const node = deployment.spec?.template.spec?.nodeSelector?.["kubernetes.io/hostname"];
+    const replicas = deployment.spec?.replicas;
+
+    const containers = deployment.spec?.template.spec?.containers;
+    const bestImage = (() => {
+        if (!containers || containers.length === 0) return null;
+        if (containers.length === 1) return containers[0].image;
+        for (const container of containers) {
+            if (container.image?.includes("java") || container.image?.includes("minecraft")) {
+                return container.image;
+            }
+        }
+    })();
+
+    let unhealthy = false;
+    const unhealthyLogs: string[] = [];
+
+    for (const pod of pods) {
+        if (pod.status?.phase !== "Running") {
+            unhealthy = true;
+            for (const containerStatus of pod.status?.containerStatuses || []) {
+                if (containerStatus.state?.waiting) {
+                    unhealthyLogs.push(`Pod ${pod.metadata?.name} is waiting: ${containerStatus.state.waiting.reason}`);
+                }
+            }
+        }
+    }
+
+    const state: DeploymentState = (() => {
+        if (unhealthy) return DeploymentState.Unhealthy;
+        if (replicas === 0) return DeploymentState.Stopped;
+        return DeploymentState.Running;
+    })();
+
     async function powerAction() {
-        if (running) {
+        if (state == DeploymentState.Running || state == DeploymentState.Unhealthy) {
             toast({
                 title: "Stopping deployment...",
                 description: `Scaling deployment "${name}" to 0 on node "${node}"`,
@@ -62,17 +106,19 @@ export default function Deployment({ name, display_name, node, image, running }:
     return (
         <div className="p-4 bg-card">
             <div className="flex flex-row items-center gap-2">
-                {running ? (
-                    <span className="size-3 block rounded-full bg-green-500" />
-                ): (
-                    <span className="size-3 block rounded-full bg-red-500" />
-                )}
-                <h2 className="text-xl font-semibold">{display_name}</h2>
+                {
+                    {
+                        '0': <span className="size-3 block rounded-full bg-green-500" title="Running" />,
+                        '1': <span className="size-3 block rounded-full bg-yellow-500" title={unhealthyLogs.join(", ")} />,
+                        '2': <span className="size-3 block rounded-full bg-red-500" title="Stopped (scaled to 0)" />,
+                    }[state]
+                }
+                <h2 className="text-xl font-semibold">{displayName}</h2>
             </div>
             <p className="text-muted-foreground text-sm overflow-hidden text-ellipsis whitespace-nowrap">Node: <span className="font-mono">{node}</span></p>
-            <p className="text-muted-foreground text-sm overflow-hidden text-ellipsis whitespace-nowrap">Image: <span className="font-mono">{image}</span></p>
+            <p className="text-muted-foreground text-sm overflow-hidden text-ellipsis whitespace-nowrap">Image: <span className="font-mono">{bestImage}</span></p>
             <div className="flex flex-row mt-2 gap-2">
-                <Button variant="outline" size="sm" onClick={powerAction}><Power /> {running ? "Stop" : "Start"}</Button>
+                <Button variant="outline" size="sm" onClick={powerAction}><Power /> {state == DeploymentState.Running || state == DeploymentState.Unhealthy ? "Stop" : "Start"}</Button>
                 <Button variant="outline" size="sm"><Settings />Manage</Button>
             </div>
         </div>

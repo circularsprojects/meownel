@@ -1,5 +1,4 @@
-import Deployment from "@/app/(main)/deployments/components/deployment";
-import { KubeConfig, CoreV1Api, AppsV1Api, AppsV1ApiPatchNamespacedDeploymentRequest, V1Deployment } from "@kubernetes/client-node";
+import { KubeConfig, CoreV1Api, AppsV1Api } from "@kubernetes/client-node";
 
 const kc = new KubeConfig();
 kc.loadFromFile("k3s.yaml");

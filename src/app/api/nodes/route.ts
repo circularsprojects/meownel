@@ -1,6 +1,16 @@
+import { auth } from "@/utils/auth";
 import { listNodes } from "@/utils/kubernetes";
 
 export async function GET(request: Request) {
+    const session = await auth.api.getSession({
+        headers: request.headers
+    });
+    if (!session) {
+        return new Response("401 Unauthorized", {
+            status: 401
+        });
+    }
+
     try {
         const nodes = await listNodes();
         const nodeNames = nodes.items.map(node => node.metadata?.name).filter(name => name !== undefined);

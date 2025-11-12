@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { LoaderCircle, Plus } from "lucide-react";
 import { toast } from "@/components/toast";
 import { V1DeploymentList, V1PodList } from "@kubernetes/client-node";
+import Link from "next/link";
 
 export default function DeploymentList() {
     const [filter, setFilter] = useState("");
@@ -60,7 +61,11 @@ export default function DeploymentList() {
             <div className="flex flex-row max-w-[44rem] w-full gap-2">
                 <Input type="search" placeholder="Filter deployments" {...{ value: filter, onChange: (e) => setFilter(e.target.value) }} />
                 <NodeDropdown {...{ value: nodeFilter, onChangeAction: setNodeFilter }} />
-                <Button variant="outline"><Plus/>New</Button>
+                <Button variant="outline" asChild>
+                    <Link href="/deployments/new">
+                        <Plus /> New
+                    </Link>
+                </Button>
             </div>
             {loading ? (
                 <LoaderCircle className="animate-spin h-12 w-12 text-gray-500" />

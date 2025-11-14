@@ -1,28 +1,35 @@
 <script lang="ts">
     import { authClient } from "$lib/auth-client";
+    import { Toaster, toast } from 'svelte-sonner'
 
     let email = $state("");
     let password = $state("");
 
     async function onsubmit(event: Event) {
         event.preventDefault();
+        const loginToast = toast.loading("Logging in...");
         await authClient.signIn.email({
             email,
-            password,
-            callbackURL: "/dashboard"
+            password
         }, {
             onSuccess() {
-                // toast({
-                //   title: "Login successful!",
-                //   description: "Welcome back!",
-                // });
+                toast.success("Logged in successfully!", {
+                    id: loginToast
+                });
+                setTimeout(() => {
+                    window.location.href = "/dashboard";
+                }, 1000);
             },
             onError(ctx: { error: { message: any; }; }) {
-                
+                toast.error(ctx.error.message, {
+                    id: loginToast
+                });
             }
         })
     }
 </script>
+
+<Toaster richColors theme="dark" />
 
 <div class="flex justify-center items-center h-dvh w-dvw">
     <div class="flex flex-col p-8 rounded-3xl sm:border-zinc-900 sm:border w-full sm:w-lg shadow-lg">

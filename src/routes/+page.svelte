@@ -1,2 +1,56 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+    import { authClient } from "$lib/auth-client";
+
+    let email = $state("");
+    let password = $state("");
+
+    async function onsubmit(event: Event) {
+        event.preventDefault();
+        await authClient.signIn.email({
+            email,
+            password,
+            callbackURL: "/dashboard"
+        }, {
+            onSuccess() {
+                // toast({
+                //   title: "Login successful!",
+                //   description: "Welcome back!",
+                // });
+            },
+            onError(ctx: { error: { message: any; }; }) {
+                
+            }
+        })
+    }
+</script>
+
+<div class="flex justify-center items-center h-dvh w-dvw">
+    <div class="flex flex-col p-8 rounded-3xl sm:border-zinc-900 sm:border w-full sm:w-lg shadow-lg">
+        <h1 class="text-3xl font-bold">meownel</h1>
+        <p>a custom minecraft panel. meowwww mreowww</p>
+        <form {onsubmit} class="flex flex-col justify-evenly items-center mt-4 gap-2">
+        <input
+            type="email" 
+            id="email"
+            placeholder="Email" 
+            class="p-2 rounded-md border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200" 
+            bind:value={email}
+            required
+        />
+        <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            class="p-2 rounded-md border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200"
+            bind:value={password}
+            required
+        />
+        <button 
+            type="submit" 
+            class="bg-pink-500 text-white p-2 rounded-md w-full hover:bg-pink-600 transition duration-200"
+        >
+            Sign In
+        </button>
+        </form>
+    </div>
+</div>

@@ -34,7 +34,7 @@
 <div class="flex justify-center items-center h-dvh w-dvw">
     <div class="flex flex-col p-8 rounded-3xl sm:border-zinc-900 sm:border w-full sm:w-lg shadow-lg">
         <h1 class="text-3xl font-bold">meownel</h1>
-        <p>a custom minecraft panel. meowwww mreowww</p>
+        <p>a custom kubernetes-based minecraft panel</p>
         <form {onsubmit} class="flex flex-col justify-evenly items-center mt-4 gap-2">
         <input
             type="email" 

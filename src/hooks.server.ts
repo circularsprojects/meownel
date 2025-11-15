@@ -4,15 +4,15 @@ import { building } from "$app/environment";
 import { redirect } from "@sveltejs/kit";
 
 export async function handle({ event, resolve }) {
-    if (event.route.id?.startsWith("/(protected)/")) {
-        const session = await auth.api.getSession({
-            headers: event.request.headers,
-        });
+    const session = await auth.api.getSession({
+        headers: event.request.headers,
+    });
 
-        if (session) {
-            event.locals.session = session.session;
-            event.locals.user = session.user;
-        } else {
+    if (session) {
+        event.locals.session = session.session;
+        event.locals.user = session.user;
+    } else {
+        if (event.route.id?.startsWith("/(protected)/")) {
             redirect(307, "/");
         }
     }

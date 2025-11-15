@@ -17,6 +17,9 @@ importers:
       kubernetes:
         specifier: ^1.0.0
         version: 1.0.0
+      lucide-svelte:
+        specifier: ^0.553.0
+        version: 0.553.0(svelte@5.43.6)
       pg:
         specifier: ^8.16.3
         version: 8.16.3
@@ -1399,6 +1402,11 @@ packages:
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
+
+  lucide-svelte@0.553.0:
+    resolution: {integrity: sha512-pOqzFX+RfcNyvjF0+nGVnSmprd+4NQ6mvpLOLEmhTyZGOad8+OtCl65822E7Rx9qE7rfKw84ODKI2v318JZ/7g==}
+    peerDependencies:
+      svelte: ^3 || ^4 || ^5.0.0-next.42
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -3192,6 +3200,10 @@ snapshots:
       p-locate: 5.0.0
 
   lodash.merge@4.6.2: {}
+
+  lucide-svelte@0.553.0(svelte@5.43.6):
+    dependencies:
+      svelte: 5.43.6
 
   magic-string@0.30.17:
     dependencies:

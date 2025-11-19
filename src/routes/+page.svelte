@@ -1,6 +1,6 @@
 <script lang="ts">
     import { authClient } from "$lib/auth-client";
-    import { Toaster, toast } from 'svelte-sonner'
+    import { toast } from 'svelte-sonner'
 
     let email = $state("");
     let password = $state("");
@@ -29,8 +29,6 @@
     }
 </script>
 
-<Toaster richColors theme="dark" />
-
 <div class="flex justify-center items-center h-dvh w-dvw">
     <div class="flex flex-col p-8 rounded-3xl sm:border-zinc-900 sm:border w-full sm:w-lg shadow-lg">
         <h1 class="text-3xl font-bold">meownel</h1>
@@ -40,7 +38,7 @@
             type="email" 
             id="email"
             placeholder="Email" 
-            class="p-2 rounded-md border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200" 
+            class="p-2 rounded-xl border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200" 
             bind:value={email}
             required
         />
@@ -48,13 +46,13 @@
             type="password"
             id="password"
             placeholder="Password"
-            class="p-2 rounded-md border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200"
+            class="p-2 rounded-xl border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200"
             bind:value={password}
             required
         />
         <button 
             type="submit" 
-            class="bg-pink-500 text-white p-2 rounded-md w-full hover:bg-pink-600 transition duration-200"
+            class="bg-pink-500 text-white p-2 rounded-xl w-full hover:bg-pink-600 transition duration-200"
         >
             Sign In
         </button>

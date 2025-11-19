@@ -3,55 +3,10 @@
     import Node from "$lib/components/dashboard/node.svelte";
     import Deployment from "$lib/components/dashboard/deployment.svelte";
     import type { V1Deployment, V1DeploymentList } from "@kubernetes/client-node";
+    import { fetchDeployments, fetchNodes } from "$lib/fetch";
 
     let deployments = $state(fetchDeployments());
     let nodes = $state(fetchNodes());
-
-    async function fetchDeployments() {
-        const promise: Promise<V1DeploymentList> = new Promise((resolve, reject) => {
-            let statusCode: number;
-
-            fetch("/api/deployments")
-                .then(res => {
-                    statusCode = res.status;
-                    return res.json();
-                })
-                .then(data => {
-                    if (statusCode === 200) {
-                        resolve(data);
-                    } else {
-                        reject(data);
-                    }
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        });
-        return promise;
-    }
-
-    async function fetchNodes() {
-        const promise: Promise<string[]> = new Promise((resolve, reject) => {
-            let statusCode: number;
-
-            fetch("/api/nodes")
-                .then(res => {
-                    statusCode = res.status;
-                    return res.json();
-                })
-                .then(data => {
-                    if (statusCode === 200) {
-                        resolve(data);
-                    } else {
-                        reject(data);
-                    }
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        });
-        return promise;
-    }
 
     function mapDeployments(deployments: V1Deployment[]) {
         return deployments.map((deployment) => {
@@ -94,7 +49,7 @@
                 {/each}
             {:catch error}
                 <div class="bg-red-500/50 border border-red-500 p-2">
-                    <p>{error}</p>
+                    <p>{error.message}</p>
                 </div>
             {/await}
         </div>
@@ -110,7 +65,7 @@
                 {/each}
             {:catch error}
                 <div class="bg-red-500/50 border border-red-500 p-2">
-                    <p>{error}</p>
+                    <p>{error.message}</p>
                 </div>
             {/await}
         </div>

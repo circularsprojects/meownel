@@ -1,6 +1,6 @@
 import type { V1DeploymentList, V1PodList } from "@kubernetes/client-node";
 
-export async function fetchDeployments() {
+export async function fetchDeployments(fetch: typeof globalThis.fetch = globalThis.fetch) {
     const promise: Promise<V1DeploymentList> = new Promise((resolve, reject) => {
         let statusCode: number;
 
@@ -23,7 +23,7 @@ export async function fetchDeployments() {
     return promise;
 }
 
-export async function fetchPods() {
+export async function fetchPods(fetch: typeof globalThis.fetch = globalThis.fetch) {
     const promise: Promise<V1PodList> = new Promise((resolve, reject) => {
         let statusCode: number;
 
@@ -46,7 +46,7 @@ export async function fetchPods() {
     return promise;
 }
 
-export async function fetchNodes() {
+export async function fetchNodes(fetch: typeof globalThis.fetch = globalThis.fetch) {
     const promise: Promise<string[]> = new Promise((resolve, reject) => {
         let statusCode: number;
 

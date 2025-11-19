@@ -2,7 +2,7 @@
     import { Select } from 'bits-ui';
     import { Check, ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-svelte';
 
-    let { items, placeholder, value }: { items: string[], placeholder: string, value: string } = $props();
+    let { items, placeholder, value = $bindable('') }: { items: string[], placeholder: string, value: string } = $props();
     let selectItems = items.map(item => ({
         label: item,
         value: item

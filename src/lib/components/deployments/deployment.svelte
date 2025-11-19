@@ -109,7 +109,7 @@
     <p class="text-sm overflow-hidden text-ellipsis whitespace-nowrap">Node: <span class="font-mono">{node}</span></p>
     <p class="text-sm overflow-hidden text-ellipsis whitespace-nowrap">Image: <span class="font-mono">{bestImage || "Unknown Image"}</span></p>
     <div class="flex flex-row mt-2 gap-2">
-        <button class="border border-zinc-600 flex flex-row items-center gap-2 px-2 py-1 rounded-md" {onclick}>
+        <button class="border border-zinc-600 flex flex-row items-center gap-2 px-2 py-1 rounded-md cursor-pointer active:scale-95" {onclick}>
             <Power class="size-5" />
             {#if state == DeploymentState.Running || state == DeploymentState.Unhealthy}
                 Stop
@@ -117,7 +117,7 @@
                 Start
             {/if}
         </button>
-        <button class="border border-zinc-600 flex flex-row items-center gap-2 px-2 py-1 rounded-md">
+        <button class="border border-zinc-600 flex flex-row items-center gap-2 px-2 py-1 rounded-md cursor-pointer active:scale-95">
             <Settings class="size-5" />
             Manage
         </button>

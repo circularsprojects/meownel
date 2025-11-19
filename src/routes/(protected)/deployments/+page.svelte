@@ -3,28 +3,30 @@
     import Dropdown from "$lib/components/dropdown.svelte";
     import Deployment from "$lib/components/deployments/deployment.svelte";
     import { Plus, LoaderCircle } from 'lucide-svelte';
-    import type { V1Deployment, V1DeploymentList, V1PodList } from "@kubernetes/client-node";
+    import type { V1Deployment, V1DeploymentList, V1PodList, V1NodeList } from "@kubernetes/client-node";
     import { onMount } from 'svelte';
     import { fetchDeployments, fetchPods, fetchNodes } from "$lib/fetch";
 
     let filter = $state("");
     let nodeFilter = $state("");
 
-    let both = $state(fetchBoth());
-    //let nodes = $state(fetchNodes());
+    // let both = $state(fetchBoth());
+    // let nodes = $state(fetchNodes());
 
-    async function fetchBoth() {
-        const promise: Promise<{ deployments: V1DeploymentList; pods: V1PodList }> = new Promise(async (resolve, reject) => {
-            try {
-                const deployments = await fetchDeployments();
-                const pods = await fetchPods();
-                resolve({ deployments, pods });
-            } catch (error) {
-                reject(error);
-            }
-        });
-        return promise;
-    }
+    // async function fetchBoth() {
+    //     const promise: Promise<{ deployments: V1DeploymentList; pods: V1PodList }> = new Promise(async (resolve, reject) => {
+    //         try {
+    //             const deployments = await fetchDeployments();
+    //             const pods = await fetchPods();
+    //             resolve({ deployments, pods });
+    //         } catch (error) {
+    //             reject(error);
+    //         }
+    //     });
+    //     return promise;
+    // }
+    let { data } = $props();
+    let { deployments, pods, nodes }: { deployments: V1DeploymentList, pods: V1PodList, nodes: string[] } = data;
 
     function mapDeployments(deployments: V1Deployment[], pods: V1PodList) {
         return deployments.map((deployment) => {
@@ -32,13 +34,10 @@
             const name = metadata.name!;
             const displayName = metadata?.annotations?.displayName;
             const node = deployment.spec?.template.spec?.nodeSelector?.["kubernetes.io/hostname"];
-
             const associatedPods = pods ? pods.items.filter(pod => {
                 const podSelector = pod.metadata?.labels?.app;
                 return podSelector === name;
             }) : [];
-
-            console.log(associatedPods)
 
             if ((displayName?.toLowerCase().includes(filter.toLowerCase()) || name?.toLowerCase().includes(filter.toLowerCase())) && (nodeFilter === "" || node === nodeFilter)) {
                 //return <Deployment key={name} deployment={deployment} pods={associatedPods} />;
@@ -62,7 +61,7 @@
                 bind:value={filter}
                 required
             />
-            <Dropdown items={['Node 1', 'Node 2', 'Node 3']} placeholder="Select a node" value={nodeFilter} />
+            <Dropdown items={ nodes } placeholder="Select a node" bind:value={nodeFilter} />
             <button 
                 type="button" 
                 class="bg-pink-500 text-white px-3 pr-4 rounded-xl hover:bg-pink-600 transition duration-200 flex flex-row items-center gap-2 cursor-pointer active:scale-95"
@@ -71,20 +70,20 @@
                 New
             </button>
         </div>
-        {#await both}
+        <!-- {#await both}
             <LoaderCircle class="animate-spin h-12 w-12 text-gray-500" />
-        {:then data}
+        {:then data} -->
             <div class="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid w-full gap-4">
-                {#each mapDeployments(data.deployments.items, data.pods) as item}
+                {#each mapDeployments(deployments.items, pods) as item}
                     {#if item}
                         <Deployment deployment={item.deployment} pods={item.pods} />
                     {/if}
                 {/each}
             </div>
-        {:catch error}
+        <!-- {:catch error}
             <div class="bg-red-500/50 border border-red-500 p-2">
                 <p>{error.message}</p>
             </div>
-        {/await}
+        {/await} -->
     </div> 
 </div>

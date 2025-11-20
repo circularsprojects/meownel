@@ -57,14 +57,14 @@
                 type="text" 
                 id="filter"
                 placeholder="Filter deployments" 
-                class="p-2 rounded-xl border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200" 
+                class="p-2 rounded-xl border border-border text-white w-full focus:border-primary outline-none duration-200" 
                 bind:value={filter}
                 required
             />
             <Dropdown items={ nodes } placeholder="Select a node" bind:value={nodeFilter} />
             <button 
                 type="button" 
-                class="bg-pink-500 text-white px-3 pr-4 rounded-xl hover:bg-pink-600 transition duration-200 flex flex-row items-center gap-2 cursor-pointer active:scale-95"
+                class="bg-primary text-white px-3 pr-4 rounded-xl hover:bg-primary-hover transition flex flex-row items-center gap-2 cursor-pointer active:scale-95"
             >
                 <Plus />
                 New

@@ -7,6 +7,8 @@
         label: item,
         value: item
     }));
+
+    const selectedValue = $derived(value !== '' ? value : 'Select a node');
 </script>
 
 <Select.Root
@@ -19,7 +21,7 @@
         class="w-64 border border-border p-2 rounded-xl text-foreground inline-flex touch-none select-none items-center transition-colors"
         aria-label={placeholder}
     >
-        {value}
+        <span class={value == '' ? 'text-muted' : ''}>{selectedValue}</span>
         <ChevronsUpDown class="ml-auto text-muted" />
     </Select.Trigger>
     <Select.Portal>

@@ -14,7 +14,7 @@
   --color-primary-hover: var(--color-pink-600);
   --color-secondary: var(--color-pink-300);
   --color-secondary-hover: var(--color-pink-400);
-  --color-border: var(--color-zinc-700);
+  --color-border: var(--color-zinc-800);
 }
 
 @layer utilities {

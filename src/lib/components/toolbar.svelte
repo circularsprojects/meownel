@@ -1,6 +1,5 @@
 <script lang="ts">
     import { authClient } from "$lib/auth-client";
-    import type { PageProps } from "../../routes/$types";
 
     function onclick() {
         authClient.signOut({

@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Power, Settings } from 'lucide-svelte';
     import { toast } from 'svelte-sonner';
+    import { Tooltip } from 'bits-ui';
     import type { V1Pod, V1Deployment } from "@kubernetes/client-node";
 
     const DeploymentState = {
@@ -97,19 +98,41 @@
 
 <div class="p-4 bg-zinc-900 rounded-xl">
     <div class="flex flex-row items-center gap-2">
-        {#if state == DeploymentState.Running}
-            <span class="size-3 block rounded-full bg-green-500" title="Running"></span>
-        {:else if state == DeploymentState.Unhealthy}
-            <span class="size-3 block rounded-full bg-yellow-500" title={unhealthyLogs.join(", ")}></span>
-        {:else}
-            <span class="size-3 block rounded-full bg-red-500" title="Stopped (scaled to 0)"></span>
-        {/if}
+        <Tooltip.Provider>
+            <Tooltip.Root delayDuration={100}>
+                <Tooltip.Trigger>
+                    {#if state == DeploymentState.Running}
+                        <span class="size-3 block rounded-full bg-green-500"></span>
+                    {:else if state == DeploymentState.Unhealthy}
+                        <span class="size-3 block rounded-full bg-yellow-500"></span>
+                    {:else}
+                        <span class="size-3 block rounded-full bg-red-500"></span>
+                    {/if}
+                </Tooltip.Trigger>
+                <Tooltip.Content
+                    sideOffset={8}
+                    class="animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-(--bits-tooltip-content-transform-origin)"
+                >
+                <div
+                    class="rounded-lg bg-background shadow-popover outline-hidden z-0 flex items-center justify-center border border-border p-2 text-sm font-medium"
+                >
+                    {#if state == DeploymentState.Running}
+                        Running
+                    {:else if state == DeploymentState.Unhealthy}
+                        {unhealthyLogs.join(", ")}
+                    {:else}
+                        Stopped (scaled to 0)
+                    {/if}
+                </div>
+                </Tooltip.Content>
+            </Tooltip.Root>
+        </Tooltip.Provider>
         <h2 class="text-xl font-semibold">{displayName || name}</h2>
     </div>
     <p class="text-sm overflow-hidden text-ellipsis whitespace-nowrap">Node: <span class="font-mono">{node}</span></p>
     <p class="text-sm overflow-hidden text-ellipsis whitespace-nowrap">Image: <span class="font-mono">{bestImage || "Unknown Image"}</span></p>
     <div class="flex flex-row mt-2 gap-2">
-        <button class="border border-zinc-600 flex flex-row items-center gap-2 px-2 py-1 rounded-md cursor-pointer active:scale-95" {onclick}>
+        <button class="border border-zinc-600 hover:border-zinc-400 flex flex-row items-center gap-2 px-2 py-1 rounded-md cursor-pointer active:scale-95 transition" {onclick}>
             <Power class="size-5" />
             {#if state == DeploymentState.Running || state == DeploymentState.Unhealthy}
                 Stop
@@ -117,7 +140,7 @@
                 Start
             {/if}
         </button>
-        <button class="border border-zinc-600 flex flex-row items-center gap-2 px-2 py-1 rounded-md cursor-pointer active:scale-95">
+        <button class="border border-zinc-600 hover:border-zinc-400 flex flex-row items-center gap-2 px-2 py-1 rounded-md cursor-pointer active:scale-95 transition">
             <Settings class="size-5" />
             Manage
         </button>

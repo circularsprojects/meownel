@@ -2,7 +2,17 @@
     import { Select } from 'bits-ui';
     import { Check, ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-svelte';
 
-    let { items, placeholder, value = $bindable('') }: { items: string[], placeholder: string, value: string } = $props();
+    let {
+        items,
+        placeholder,
+        value = $bindable(''),
+        id
+    }: {
+        items: string[],
+        placeholder: string,
+        value: string,
+        id?: string
+    } = $props();
     let selectItems = items.map(item => ({
         label: item,
         value: item
@@ -18,6 +28,7 @@
     allowDeselect={true}
 >
     <Select.Trigger
+        id={id}
         class="w-64 border border-border p-2 rounded-xl text-foreground inline-flex touch-none select-none items-center transition-colors"
         aria-label={placeholder}
     >

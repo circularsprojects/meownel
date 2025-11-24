@@ -34,28 +34,28 @@
         <h1 class="text-3xl font-bold">meownel</h1>
         <p>a custom kubernetes-based minecraft panel</p>
         <form {onsubmit} class="flex flex-col justify-evenly items-center mt-4 gap-2">
-        <input
-            type="email" 
-            id="email"
-            placeholder="Email" 
-            class="p-2 rounded-xl border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200" 
-            bind:value={email}
-            required
-        />
-        <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            class="p-2 rounded-xl border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200"
-            bind:value={password}
-            required
-        />
-        <button 
-            type="submit" 
-            class="bg-pink-500 text-white p-2 rounded-xl w-full hover:bg-pink-600 transition duration-200"
-        >
-            Sign In
-        </button>
+            <input
+                type="email" 
+                id="email"
+                placeholder="Email" 
+                class="p-2 rounded-xl border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200" 
+                bind:value={email}
+                required
+            />
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                class="p-2 rounded-xl border border-zinc-800 text-white w-full focus:border-pink-500 outline-none duration-200"
+                bind:value={password}
+                required
+            />
+            <button 
+                type="submit" 
+                class="bg-pink-500 text-white p-2 rounded-xl w-full hover:bg-pink-600 transition duration-200"
+            >
+                Sign In
+            </button>
         </form>
     </div>
 </div>

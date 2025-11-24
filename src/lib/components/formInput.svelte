@@ -1,0 +1,32 @@
+<script lang="ts">
+    let {
+        label,
+        id,
+        placeholder,
+        type = "text",
+        required = false,
+        value = $bindable("")
+    }: {
+        label: string,
+        id: string,
+        placeholder: string,
+        type?: string,
+        required?: boolean,
+        value: string
+    } = $props();
+</script>
+
+<div class="flex flex-col gap-2 w-full">
+    <label for={id}>
+        {label}
+        {#if required} <span class="text-sm text-red-400">(required)</span> {/if}
+    </label>
+    <input
+        type={type}
+        id={id}
+        placeholder={placeholder}
+        class="p-2 rounded-xl border border-border text-white w-full focus:border-primary outline-none duration-200"
+        bind:value={value}
+        {required}
+    />
+</div>

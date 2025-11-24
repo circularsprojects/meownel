@@ -62,13 +62,13 @@
                 required
             />
             <Dropdown items={ nodes } placeholder="Select a node" bind:value={nodeFilter} />
-            <button 
-                type="button" 
+            <a 
+                href="/deployments/new"
                 class="bg-primary text-white px-3 pr-4 rounded-xl hover:bg-primary-hover transition flex flex-row items-center gap-2 cursor-pointer active:scale-95"
             >
                 <Plus />
                 New
-            </button>
+            </a>
         </div>
         <!-- {#await both}
             <LoaderCircle class="animate-spin h-12 w-12 text-gray-500" />

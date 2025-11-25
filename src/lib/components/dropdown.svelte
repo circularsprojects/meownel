@@ -6,12 +6,14 @@
         items,
         placeholder,
         value = $bindable(''),
-        id
+        id,
+        required = false
     }: {
         items: string[],
         placeholder: string,
         value: string,
-        id?: string
+        id?: string,
+        required?: boolean
     } = $props();
     let selectItems = items.map(item => ({
         label: item,
@@ -26,6 +28,8 @@
     bind:value={value}
     items={selectItems}
     allowDeselect={true}
+    required={required}
+    name={id}
 >
     <Select.Trigger
         id={id}

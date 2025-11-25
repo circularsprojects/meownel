@@ -1,4 +1,4 @@
-import { listDeployments, listNodesAsString, listPods, listServices, namespace } from "@/utils/kubernetes";
+import { listDeployments, listNodesAsString, listPods, listServices, namespace } from "$lib/kubernetes";
 
 async function main() {
     await listNodesAsString().then((nodes) => {

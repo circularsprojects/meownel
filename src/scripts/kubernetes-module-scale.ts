@@ -1,4 +1,4 @@
-import { scaleDeployment } from "@/utils/kubernetes";
+import { scaleDeployment } from "$lib/kubernetes";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 

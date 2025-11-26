@@ -37,8 +37,8 @@
     }
 </script>
 
-<div class="flex p-2 gap-2">
-    <div class="rounded-xl border-2 border-zinc-900 p-4 bg-black min-w-[24rem] max-w-160 min-h-48">
+<div class="flex gap-2 md:flex-row flex-col w-full md:p-0 p-4 md:w-auto">
+    <div class="rounded-xl border-2 border-zinc-900 p-4 bg-black md:min-w-[24rem] md:max-w-160 min-h-48">
         <h1 class="text-2xl font-bold mb-3">Active Deployments</h1>
         <div class="flex flex-col gap-2 max-h-128 overflow-y-auto">
             {#await deployments}
@@ -54,7 +54,7 @@
             {/await}
         </div>
     </div>
-    <div class="rounded-xl border-2 border-zinc-900 p-4 bg-black min-w-[24rem] max-w-160 min-h-48">
+    <div class="rounded-xl border-2 border-zinc-900 p-4 bg-black md:min-w-[24rem] md:max-w-160 min-h-48">
         <h1 class="text-2xl font-bold mb-3">Connected Nodes</h1>
         <div class="flex flex-col gap-2 max-h-128 overflow-y-auto">
             {#await nodes}

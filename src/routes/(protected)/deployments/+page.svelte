@@ -52,7 +52,7 @@
     <Toolbar />
     <div class="w-full h-full flex flex-col gap-4 items-center px-8 lg:px-38 xl:px-72">
         <h1 class="text-3xl font-bold mt-4">Deployments</h1>
-        <div class="flex flex-row max-w-176 w-full gap-2">
+        <div class="flex flex-row max-w-176 w-full gap-2 flex-wrap md:flex-nowrap">
             <input
                 type="text" 
                 id="filter"
@@ -61,10 +61,10 @@
                 bind:value={filter}
                 required
             />
-            <Dropdown items={ nodes } placeholder="Select a node" bind:value={nodeFilter} />
+            <Dropdown items={ nodes } placeholder="Select a node" bind:value={nodeFilter} extraClass="flex-1 md:flex-initial" />
             <a 
                 href="/deployments/new"
-                class="bg-primary text-white px-3 pr-4 rounded-xl hover:bg-primary-hover transition flex flex-row items-center gap-2 cursor-pointer active:scale-95"
+                class="bg-primary text-white px-3 pr-4 rounded-xl hover:bg-primary-hover transition flex flex-row items-center gap-2 cursor-pointer active:scale-95 flex-1 md:flex-initial"
             >
                 <Plus />
                 New

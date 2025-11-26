@@ -7,13 +7,15 @@
         placeholder,
         value = $bindable(''),
         id,
-        required = false
+        required = false,
+        extraClass
     }: {
         items: string[],
         placeholder: string,
         value: string,
         id?: string,
-        required?: boolean
+        required?: boolean,
+        extraClass?: string
     } = $props();
     let selectItems = items.map(item => ({
         label: item,
@@ -33,10 +35,10 @@
 >
     <Select.Trigger
         id={id}
-        class="w-64 border border-border p-2 rounded-xl text-foreground inline-flex touch-none select-none items-center transition-colors"
+        class="w-64 border border-border p-2 rounded-xl text-foreground inline-flex touch-none select-none items-center transition-colors {extraClass}"
         aria-label={placeholder}
     >
-        <span class={value == '' ? 'text-muted' : ''}>{selectedValue}</span>
+        <span class="{value == '' ? 'text-muted' : ''} overflow-hidden text-ellipsis whitespace-nowrap">{selectedValue}</span>
         <ChevronsUpDown class="ml-auto text-muted" />
     </Select.Trigger>
     <Select.Portal>

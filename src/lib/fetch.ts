@@ -68,3 +68,40 @@ export async function fetchNodes(fetch: typeof globalThis.fetch = globalThis.fet
     });
     return promise;
 }
+
+export async function newDeployment({name, displayName, image, nodeName, env, mounts}: {name: string, displayName: string, image: string, nodeName: string, env: Record<string, string>, mounts: Record<string, string>}, fetch: typeof globalThis.fetch = globalThis.fetch) {
+    const promise: Promise<string> = new Promise((resolve, reject) => {
+        let statusCode: number;
+
+        fetch("/api/deployments/new", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name,
+                displayName,
+                image,
+                nodeName,
+                env,
+                mounts
+            })
+        })
+        .then(res => {
+            statusCode = res.status;
+            return res.json();
+        })
+        .then(data => {
+            if (statusCode === 200) {
+                resolve(data);
+            } else {
+                reject(data);
+            }
+        })
+        .catch(err => {
+            reject(err);
+        })
+    });
+    
+    return promise;
+}

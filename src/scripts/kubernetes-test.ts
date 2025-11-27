@@ -1,4 +1,4 @@
-import { KubeConfig, CoreV1Api, V1Deployment, AppsV1Api } from "@kubernetes/client-node";
+import { KubeConfig, CoreV1Api, V1Deployment, AppsV1Api, V1Service } from "@kubernetes/client-node";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
@@ -68,11 +68,14 @@ async function main () {
                         }
                     },
                     spec: {
+                        hostNetwork: true,
+                        dnsPolicy: "ClusterFirstWithHostNet",
                         nodeSelector: { "kubernetes.io/hostname": argv.selectedNode },
                         containers: [
                             {
                                 name: "minecraft",
                                 image: "itzg/minecraft-server",
+                                imagePullPolicy: "Always",
                                 ports: [{ containerPort: 25565 }],
                                 env: [
                                     { name: "EULA", value: "TRUE" },
@@ -80,9 +83,24 @@ async function main () {
                                     { name: "TYPE", value: "PAPER" },
                                 ],
                                 tty: true,
-                                stdin: true
+                                stdin: true,
+                                volumeMounts: [
+                                    {
+                                        mountPath: "/data",
+                                        name: "minecraft-data"
+                                    }
+                                ]
                             },
                         ],
+                        volumes: [
+                            {
+                                name: "minecraft-data",
+                                hostPath: {
+                                    path: "/Users/circular/meownel-mcdata",
+                                    type: "DirectoryOrCreate"
+                                }
+                            }
+                        ]
                     },
                 },
             }
@@ -95,7 +113,7 @@ async function main () {
 
         console.log("Minecraft server deployment created successfully.");
 
-        const service = {
+        const service: V1Service = {
             apiVersion: "v1",
             kind: "Service",
             metadata: { name: "minecraft-service" },

@@ -29,3 +29,12 @@
     scrollbar-width: none;
   }
 }
+
+:root {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+:root::-webkit-scrollbar {
+  display: none;
+}

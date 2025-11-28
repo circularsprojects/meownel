@@ -2,7 +2,12 @@ import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment } from "@kubernetes/clie
 import { homedir } from "os";
 
 const kc = new KubeConfig();
-kc.loadFromFile("k3s.yaml");
+try {
+    kc.loadFromFile("kubernetes.yaml");
+} catch (err) {
+    console.error("Did you forget to add a 'kubernetes.yaml' file? You can make one using 'kubectl config view --raw > kubernetes.yaml' (if you're running this on the control node)");
+    throw err;
+}
 
 export const k8sApi = kc.makeApiClient(CoreV1Api);
 export const appsApi = kc.makeApiClient(AppsV1Api);

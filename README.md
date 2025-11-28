@@ -1,5 +1,7 @@
 # meownel
 
-A simple minecraft-focused game panel, built with Next.js with Kubernetes as a backend.
+A simple minecraft-focused game panel, built with Svelte with Kubernetes as a backend.
 
-more readme soon
+Not currently ready for production, still in quite early development
+
+There will be a proper install guide later, right now it's still very scuffed

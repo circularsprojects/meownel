@@ -127,7 +127,7 @@
                 </Tooltip.Content>
             </Tooltip.Root>
         </Tooltip.Provider>
-        <h2 class="text-xl font-semibold">{displayName || name}</h2>
+        <h2 class="text-xl font-semibold overflow-hidden text-ellipsis whitespace-nowrap">{displayName || name}</h2>
     </div>
     <p class="text-sm overflow-hidden text-ellipsis whitespace-nowrap">Node: <span class="font-mono">{node}</span></p>
     <p class="text-sm overflow-hidden text-ellipsis whitespace-nowrap">Image: <span class="font-mono">{bestImage || "Unknown Image"}</span></p>
@@ -140,9 +140,9 @@
                 Start
             {/if}
         </button>
-        <button class="border border-zinc-600 hover:border-zinc-400 flex flex-row items-center gap-2 px-2 py-1 rounded-md cursor-pointer active:scale-95 transition">
+        <a href="/deployments/view/{name}" class="border border-zinc-600 hover:border-zinc-400 flex flex-row items-center gap-2 px-2 py-1 rounded-md cursor-pointer active:scale-95 transition">
             <Settings class="size-5" />
             Manage
-        </button>
+        </a>
     </div>
 </div>

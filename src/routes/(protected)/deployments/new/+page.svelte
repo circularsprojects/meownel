@@ -25,6 +25,20 @@
 
     async function onsubmit(event: Event) {
         event.preventDefault();
+
+        const mountRegex = /^([^:]+):([^:]+)$/gm;
+        const envRegex = /^([^=]+)=(.+)$/gm;
+
+        if (!mountRegex.test(mounts)) {
+            toast.error("Invalid mounts format. Each line must be in the format hostPath:mountPath");
+            return;
+        }
+
+        if (!envRegex.test(env)) {
+            toast.error("Invalid environment variables format. Each line must be in the format KEY=VALUE");
+            return;
+        }
+
         await newDeployment({
             name: autoNameGenerated ? autoName : name,
             displayName: label,
@@ -41,7 +55,7 @@
         }).then(res => {
             toast.success("Deployment created successfully!");
         }).catch(err => {
-            toast.error("Failed to create deployment: " + err.message);
+            toast.error("Failed to create deployment: " + err.message || err.body.message || "Unknown error");
         });
     }
 </script>

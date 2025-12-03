@@ -1,4 +1,4 @@
-import type { V1DeploymentList, V1PodList } from "@kubernetes/client-node";
+import type { V1Deployment, V1DeploymentList, V1PodList } from "@kubernetes/client-node";
 
 export async function fetchDeployments(fetch: typeof globalThis.fetch = globalThis.fetch) {
     const promise: Promise<V1DeploymentList> = new Promise((resolve, reject) => {
@@ -103,5 +103,28 @@ export async function newDeployment({name, displayName, image, nodeName, env, mo
         })
     });
     
+    return promise;
+}
+
+export async function fetchDeployment(deploymentName: string, fetch: typeof globalThis.fetch = globalThis.fetch) {
+    const promise: Promise<V1Deployment> = new Promise((resolve, reject) => {
+        let statusCode: number;
+
+        fetch(`/api/deployments/get/${deploymentName}`)
+            .then(res => {
+                statusCode = res.status;
+                return res.json();
+            })
+            .then(data => {
+                if (statusCode === 200) {
+                    resolve(data);
+                } else {
+                    reject(data);
+                }
+            })
+            .catch(err => {
+                reject(err);
+            });
+    });
     return promise;
 }

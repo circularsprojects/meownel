@@ -150,3 +150,15 @@ export async function createDeployment(
         throw err;
     }
 }
+
+export async function getDeployment(deploymentName: string, searchNamespace: string = namespace) {
+    try {
+        return await appsApi.readNamespacedDeployment({
+            name: deploymentName,
+            namespace: searchNamespace
+        });
+    } catch (err) {
+        console.error("Error getting deployment:", err);
+        throw err;
+    }
+}

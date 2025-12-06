@@ -1,4 +1,6 @@
-import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment } from "@kubernetes/client-node";
+import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment, Attach } from "@kubernetes/client-node";
+import { PassThrough } from "stream";
+import WebSocket from "ws";
 import { homedir } from "os";
 
 const kc = new KubeConfig();
@@ -161,4 +163,25 @@ export async function getDeployment(deploymentName: string, searchNamespace: str
         console.error("Error getting deployment:", err);
         throw err;
     }
+}
+
+export async function attachRaw(ws: WebSocket, podName: string, containerName: string, searchNamespace: string = namespace) {
+    const attach = new Attach(kc);
+
+    const stdinStream = new PassThrough();
+    const stderrStream = new PassThrough();
+    const stdoutStream = new PassThrough();
+    
+    await attach.attach(searchNamespace, podName, containerName, stdinStream, stderrStream, stdoutStream, true);
+
+    stdoutStream.on('data', (data) => {
+        ws.send(data, { binary: true });
+    });
+
+    ws.on('message', (msg, isBinary) => {
+        if (isBinary) stdinStream.write(msg);
+        else stdinStream.write(Buffer.from(msg.toString(), 'utf-8'));
+    });
+
+    ws.on('close', () => stdinStream.end())
 }

@@ -1,4 +1,7 @@
-import { auth } from "$lib/auth";
+// import { auth } from "$lib/auth";
+import 'dotenv/config';
+import { betterAuth } from "better-auth";
+import { Pool } from "pg";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
@@ -7,6 +10,21 @@ const parser = yargs(hideBin(process.argv)).options({
     email: { type: 'string', demandOption: true, describe: 'Email for new account' },
     password: { type: 'string', demandOption: true, describe: 'Password for new account' }
 })
+
+const { POSTGRES_URL } = process.env;
+if (!POSTGRES_URL) {
+    console.error("POSTGRES_URL environment variable is not set");
+    process.exit(1);
+}
+
+const auth = betterAuth({
+    database: new Pool({
+        connectionString: POSTGRES_URL,
+    }),
+    emailAndPassword: {
+        enabled: true
+    }
+});
 
 async function main() {
     const argv = await parser.parse();

@@ -20,6 +20,9 @@ importers:
       bits-ui:
         specifier: ^2.14.4
         version: 2.14.4(@internationalized/date@3.10.0)(@sveltejs/kit@2.49.0(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.43.15)(vite@7.2.4(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.43.15)(vite@7.2.4(@types/node@22.19.1)(jiti@2.6.1)(lightningcss@1.30.2)))(svelte@5.43.15)
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       kubernetes:
         specifier: ^1.0.0
         version: 1.0.0
@@ -38,6 +41,9 @@ importers:
       tailwindcss-radix-colors:
         specifier: ^2.1.0
         version: 2.1.0(tailwindcss@4.1.17)
+      ws:
+        specifier: ^8.18.3
+        version: 8.18.3
       yargs:
         specifier: ^18.0.0
         version: 18.0.0
@@ -953,6 +959,10 @@ packages:
 
   devalue@5.5.0:
     resolution: {integrity: sha512-69sM5yrHfFLJt0AZ9QqZXGCPfJ7fQjvpln3Rq5+PS03LD32Ost1Q9N+eEnaQwGRIriKkMImXD56ocjQmfjbV3w==}
+
+  dotenv@17.2.3:
+    resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
+    engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -2601,6 +2611,8 @@ snapshots:
   detect-libc@2.1.2: {}
 
   devalue@5.5.0: {}
+
+  dotenv@17.2.3: {}
 
   dunder-proto@1.0.1:
     dependencies:

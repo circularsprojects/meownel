@@ -2,15 +2,11 @@ import { getRequestEvent } from "$app/server";
 import { betterAuth } from "better-auth";
 import { sveltekitCookies } from "better-auth/svelte-kit";
 import { Pool } from "pg";
-
-const connectionString = process.env.POSTGRES_URL;
-if (!connectionString) {
-    throw new Error("POSTGRES_URL environment variable is not set");
-}
+import { POSTGRES_URL } from "$env/static/private";
 
 export const auth = betterAuth({
     database: new Pool({
-        connectionString: connectionString,
+        connectionString: POSTGRES_URL,
     }),
     emailAndPassword: {
         enabled: true

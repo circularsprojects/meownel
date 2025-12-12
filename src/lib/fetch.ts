@@ -128,3 +128,35 @@ export async function fetchDeployment(deploymentName: string, fetch: typeof glob
     });
     return promise;
 }
+
+export async function fetchLogs(podName: string, containerName: string | undefined, lines: number | undefined, fetch: typeof globalThis.fetch = globalThis.fetch) {
+    const promise: Promise<string> = new Promise((resolve, reject) => {
+        let statusCode: number;
+
+        const url = new URL('/api/pods/logs', window.location.origin);
+        url.searchParams.append('podName', podName);
+        if (containerName) {
+            url.searchParams.append('containerName', containerName);
+        }
+        if (lines !== undefined) {
+            url.searchParams.append('lines', lines.toString());
+        }
+
+        fetch(url.toString())
+            .then(res => {
+                statusCode = res.status;
+                return res.text();
+            })
+            .then(data => {
+                if (statusCode === 200) {
+                    resolve(data);
+                } else {
+                    reject(data);
+                }
+            })
+            .catch(err => {
+                reject(err);
+            });
+    });
+    return promise;
+}

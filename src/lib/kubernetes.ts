@@ -2,6 +2,7 @@ import { KubeConfig, CoreV1Api, AppsV1Api, V1Deployment, Attach } from "@kuberne
 import { PassThrough } from "stream";
 import WebSocket from "ws";
 import { homedir } from "os";
+import 'dotenv/config';
 
 const kc = new KubeConfig();
 try {
@@ -167,21 +168,54 @@ export async function getDeployment(deploymentName: string, searchNamespace: str
 
 export async function attachRaw(ws: WebSocket, podName: string, containerName: string, searchNamespace: string = namespace) {
     const attach = new Attach(kc);
-
-    const stdinStream = new PassThrough();
-    const stderrStream = new PassThrough();
-    const stdoutStream = new PassThrough();
     
-    await attach.attach(searchNamespace, podName, containerName, stdinStream, stderrStream, stdoutStream, true);
+    const stdoutStream = new PassThrough();
+    const stdinStream = new PassThrough();
 
+    await attach.attach(searchNamespace, podName, containerName, stdoutStream, null, stdinStream, true).then((attachws) => {
+        console.log(`Attached to pod ${podName} (container: ${containerName})`);
+        ws.on('close', () => {
+            attachws.close();
+        })
+    }).catch((err) => {
+        console.error("Error attaching to pod:", err);
+        throw err;
+    });
+
+    // Data received from pod, sent to client
     stdoutStream.on('data', (data) => {
         ws.send(data, { binary: true });
     });
 
+    // Data received from client, sent to pod
     ws.on('message', (msg, isBinary) => {
-        if (isBinary) stdinStream.write(msg);
-        else stdinStream.write(Buffer.from(msg.toString(), 'utf-8'));
+        if (isBinary) stdinStream.write(msg, (error) => {
+            if (error) {
+                console.error("Error writing to stdin stream:", error);
+            }
+        });
+        else stdinStream.write(Buffer.from(msg.toString(), 'utf-8'), (error) => {
+            if (error) {
+                console.error("Error writing to stdin stream:", error);
+            }
+        });
     });
 
-    ws.on('close', () => stdinStream.end())
+    // ws.on('close', () => stdinStream.end())
+}
+
+export async function getPodLogs(podName: string, lines: number = 100, containerName: string | undefined, searchNamespace: string = namespace): Promise<string> {
+    try {
+        const log = await k8sApi.readNamespacedPodLog({
+            name: podName,
+            namespace: searchNamespace,
+            container: containerName,
+            pretty: "true",
+            tailLines: lines
+        });
+        return log;
+    } catch (err) {
+        console.error("Error getting pod logs:", err);
+        throw err;
+    }
 }

@@ -2,7 +2,7 @@ import { auth } from "$lib/auth";
 import { createDeployment } from "$lib/kubernetes";
 import { error, json } from "@sveltejs/kit";
 
-export async function POST({ request, params }) {
+export async function POST({ request }) {
     const session = await auth.api.getSession({
         headers: request.headers
     });

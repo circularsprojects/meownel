@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
-import { fetchDeployment } from '$lib/fetch';
+import { fetchDeployment, fetchPods } from '$lib/fetch';
 
 export const load: PageLoad = async ({ params, fetch }) => {
 	const deployment = await fetchDeployment(params.deployment, fetch)
@@ -13,6 +13,18 @@ export const load: PageLoad = async ({ params, fetch }) => {
 			}
 			throw error(500, 'Internal Server Error ' + err);
 		});
+
+	const allPods = await fetchPods(fetch)
+		.then((res) => {
+			return res;
+		})
+		.catch((err) => {
+			throw error(500, 'Internal Server Error ' + err);
+		});
+
+	const pods = allPods.items.filter(
+		(pod) => pod.metadata?.labels?.app === deployment.metadata?.name
+	);
 	
-	return { deployment };
+	return { deployment, pods };
 };

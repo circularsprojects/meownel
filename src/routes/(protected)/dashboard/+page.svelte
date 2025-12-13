@@ -27,7 +27,8 @@
 
             if (replicas && replicas > 0) {
                 return {
-                    name: displayName || name,
+                    displayName: displayName,
+                    name: name,
                     image: bestImage || "Unknown Image"
                 };
             }
